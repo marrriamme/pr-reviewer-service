@@ -12,13 +12,16 @@ import (
 	"github.com/marrria_mme/pr-reviewer-service/config"
 	"github.com/marrria_mme/pr-reviewer-service/internal/repository"
 	prRepo "github.com/marrria_mme/pr-reviewer-service/internal/repository/pr"
+	statsRepo "github.com/marrria_mme/pr-reviewer-service/internal/repository/stats"
 	teamRepo "github.com/marrria_mme/pr-reviewer-service/internal/repository/team"
 	userRepo "github.com/marrria_mme/pr-reviewer-service/internal/repository/user"
 	"github.com/marrria_mme/pr-reviewer-service/internal/transport/middleware"
 	prTransport "github.com/marrria_mme/pr-reviewer-service/internal/transport/pr"
+	statsTransport "github.com/marrria_mme/pr-reviewer-service/internal/transport/stats"
 	teamTransport "github.com/marrria_mme/pr-reviewer-service/internal/transport/team"
 	userTransport "github.com/marrria_mme/pr-reviewer-service/internal/transport/user"
 	prUs "github.com/marrria_mme/pr-reviewer-service/internal/usecase/pr"
+	statsUs "github.com/marrria_mme/pr-reviewer-service/internal/usecase/stats"
 	teamUs "github.com/marrria_mme/pr-reviewer-service/internal/usecase/team"
 	userUs "github.com/marrria_mme/pr-reviewer-service/internal/usecase/user"
 )
@@ -47,14 +50,17 @@ func NewApp(conf *config.Config) (*App, error) {
 	teamRepository := teamRepo.NewTeamRepository(db)
 	userRepository := userRepo.NewUserRepository(db)
 	prRepository := prRepo.NewPRRepository(db)
+	statsRepository := statsRepo.NewStatsRepository(db)
 
 	teamUsecase := teamUs.NewTeamUsecase(teamRepository)
 	userUsecase := userUs.NewUserUsecase(userRepository)
 	prUsecase := prUs.NewPRUsecase(prRepository, userRepository)
+	statsUsecase := statsUs.NewStatsUsecase(statsRepository)
 
 	teamHandler := teamTransport.NewTeamHandler(teamUsecase)
 	userHandler := userTransport.NewUserHandler(userUsecase)
 	prHandler := prTransport.NewPRHandler(prUsecase)
+	statsHandler := statsTransport.NewStatsHandler(statsUsecase)
 
 	router := mux.NewRouter()
 
@@ -74,6 +80,8 @@ func NewApp(conf *config.Config) (*App, error) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"status": "healthy"}`))
 	}).Methods("GET")
+
+	router.HandleFunc("/stats", statsHandler.GetStats).Methods("GET")
 
 	app := &App{
 		conf:   conf,

@@ -10,17 +10,17 @@ import (
 )
 
 type UserUsecase struct {
-	repo repository.IUserRepository
+	userRepo repository.IUserRepository
 }
 
-func NewUserUsecase(repo repository.IUserRepository) *UserUsecase {
+func NewUserUsecase(userRepo repository.IUserRepository) *UserUsecase {
 	return &UserUsecase{
-		repo: repo,
+		userRepo: userRepo,
 	}
 }
 
 func (u *UserUsecase) SetUserActivity(ctx context.Context, userID string, isActive bool) (*models.User, error) {
-	user, err := u.repo.UpdateUserActivity(ctx, userID, isActive)
+	user, err := u.userRepo.UpdateUserActivity(ctx, userID, isActive)
 	if err != nil {
 		if err == errs.ErrNotFound {
 			return nil, fmt.Errorf("user not found: %w", errs.ErrNotFound)
@@ -32,7 +32,7 @@ func (u *UserUsecase) SetUserActivity(ctx context.Context, userID string, isActi
 }
 
 func (u *UserUsecase) GetUserReviewPRs(ctx context.Context, userID string) ([]models.PullRequestShort, error) {
-	exists, err := u.repo.UserExists(ctx, userID)
+	exists, err := u.userRepo.UserExists(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check user existence: %w", err)
 	}
@@ -41,5 +41,5 @@ func (u *UserUsecase) GetUserReviewPRs(ctx context.Context, userID string) ([]mo
 		return nil, fmt.Errorf("user not found: %w", errs.ErrNotFound)
 	}
 
-	return u.repo.GetUserReviewPRs(ctx, userID)
+	return u.userRepo.GetUserReviewPRs(ctx, userID)
 }
