@@ -49,7 +49,7 @@ func NewApp(conf *config.Config) (*App, error) {
 	prRepository := prRepo.NewPRRepository(db)
 
 	teamUsecase := teamUs.NewTeamUsecase(teamRepository)
-	userUsecase := userUs.NewUserUsecase(userRepository, prRepository)
+	userUsecase := userUs.NewUserUsecase(userRepository)
 	prUsecase := prUs.NewPRUsecase(prRepository, userRepository)
 
 	teamHandler := teamTransport.NewTeamHandler(teamUsecase)

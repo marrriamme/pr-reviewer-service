@@ -115,25 +115,6 @@ func (r *PRRepository) MergePR(ctx context.Context, prID string) (*models.PullRe
 	}, nil
 }
 
-func (r *PRRepository) GetUserReviewPRs(ctx context.Context, userID string) ([]models.PullRequestShort, error) {
-	rows, err := r.db.QueryContext(ctx, queryGetUserReviewPRs, userID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user review PRs: %w", err)
-	}
-	defer rows.Close()
-
-	var prs []models.PullRequestShort
-	for rows.Next() {
-		var pr models.PullRequestShort
-		if err = rows.Scan(&pr.PullRequestID, &pr.PullRequestName, &pr.AuthorID, &pr.Status); err != nil {
-			return nil, fmt.Errorf("failed to scan PR: %w", err)
-		}
-		prs = append(prs, pr)
-	}
-
-	return prs, nil
-}
-
 func (r *PRRepository) PRExists(ctx context.Context, prID string) (bool, error) {
 	var exists bool
 	if err := r.db.QueryRowContext(ctx, queryPRExists, prID).Scan(&exists); err != nil {
@@ -160,12 +141,4 @@ func (r *PRRepository) getPRReviewers(ctx context.Context, prID string) ([]strin
 	}
 
 	return reviewers, nil
-}
-
-func (r *PRRepository) IsPRReviewer(ctx context.Context, prID, userID string) (bool, error) {
-	var exists bool
-	if err := r.db.QueryRowContext(ctx, queryCheckPRReviewer, prID, userID).Scan(&exists); err != nil {
-		return false, fmt.Errorf("failed to check PR reviewer: %w", err)
-	}
-	return exists, nil
 }

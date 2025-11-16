@@ -38,4 +38,10 @@ const (
 
 	queryUserExists = `
         SELECT EXISTS(SELECT 1 FROM users WHERE user_id = $1)`
+
+	queryGetUserReviewPRs = `
+        SELECT pr.pull_request_id, pr.pull_request_name, pr.author_id, pr.status
+        FROM pull_requests pr
+        JOIN pull_request_reviewers prr ON pr.pull_request_id = prr.pull_request_id
+        WHERE prr.reviewer_id = $1 AND pr.status = 'OPEN'`
 )

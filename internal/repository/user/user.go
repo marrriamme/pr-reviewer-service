@@ -43,25 +43,6 @@ func (r *UserRepository) UpdateUserActivity(ctx context.Context, userID string, 
 	return &user, nil
 }
 
-func (r *UserRepository) GetActiveTeamMembers(ctx context.Context, teamName, excludeUserID string) ([]models.User, error) {
-	rows, err := r.db.QueryContext(ctx, queryGetActiveTeamMembers, teamName, excludeUserID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get active team members: %w", err)
-	}
-	defer rows.Close()
-
-	var users []models.User
-	for rows.Next() {
-		var user models.User
-		if err = rows.Scan(&user.UserID, &user.Username, &user.TeamName, &user.IsActive); err != nil {
-			return nil, fmt.Errorf("failed to scan user: %w", err)
-		}
-		users = append(users, user)
-	}
-
-	return users, nil
-}
-
 func (r *UserRepository) GetRandomActiveTeamMember(ctx context.Context, teamName, excludeUserID, excludeAuthorID string) (string, error) {
 	var userID string
 	if err := r.db.QueryRowContext(ctx, queryGetRandomActiveTeamMember, teamName, excludeUserID, excludeAuthorID).Scan(&userID); err != nil {
@@ -104,4 +85,23 @@ func (r *UserRepository) UserExists(ctx context.Context, userID string) (bool, e
 	}
 
 	return exists, nil
+}
+
+func (r *UserRepository) GetUserReviewPRs(ctx context.Context, userID string) ([]models.PullRequestShort, error) {
+	rows, err := r.db.QueryContext(ctx, queryGetUserReviewPRs, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user review PRs: %w", err)
+	}
+	defer rows.Close()
+
+	var prs []models.PullRequestShort
+	for rows.Next() {
+		var pr models.PullRequestShort
+		if err = rows.Scan(&pr.PullRequestID, &pr.PullRequestName, &pr.AuthorID, &pr.Status); err != nil {
+			return nil, fmt.Errorf("failed to scan PR: %w", err)
+		}
+		prs = append(prs, pr)
+	}
+
+	return prs, nil
 }

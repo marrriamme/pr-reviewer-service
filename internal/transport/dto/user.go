@@ -18,9 +18,16 @@ type UserDTO struct {
 	IsActive bool   `json:"is_active"`
 }
 
+type PullRequestShortDTO struct {
+	PullRequestID   string `json:"pull_request_id"`
+	PullRequestName string `json:"pull_request_name"`
+	AuthorID        string `json:"author_id"`
+	Status          string `json:"status"`
+}
+
 type UserReviewResponseDTO struct {
-	UserID       string                    `json:"user_id"`
-	PullRequests []models.PullRequestShort `json:"pull_requests"`
+	UserID       string                `json:"user_id"`
+	PullRequests []PullRequestShortDTO `json:"pull_requests"`
 }
 
 func ToUserResponseDTO(user *models.User) UserResponseDTO {
@@ -31,4 +38,25 @@ func ToUserResponseDTO(user *models.User) UserResponseDTO {
 		IsActive: user.IsActive,
 	}
 	return UserResponseDTO{User: userDTO}
+}
+
+func ToPullRequestShortDTO(pr models.PullRequestShort) PullRequestShortDTO {
+	return PullRequestShortDTO{
+		PullRequestID:   pr.PullRequestID,
+		PullRequestName: pr.PullRequestName,
+		AuthorID:        pr.AuthorID,
+		Status:          pr.Status,
+	}
+}
+
+func NewUserReviewResponseDTO(userID string, prs []models.PullRequestShort) UserReviewResponseDTO {
+	prDTOs := make([]PullRequestShortDTO, len(prs))
+	for i, pr := range prs {
+		prDTOs[i] = ToPullRequestShortDTO(pr)
+	}
+
+	return UserReviewResponseDTO{
+		UserID:       userID,
+		PullRequests: prDTOs,
+	}
 }

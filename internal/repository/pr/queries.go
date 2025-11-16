@@ -17,12 +17,6 @@ const (
         WHERE pull_request_id = $1
         RETURNING pull_request_id, pull_request_name, author_id, status, created_at, merged_at`
 
-	queryGetUserReviewPRs = `
-        SELECT pr.pull_request_id, pr.pull_request_name, pr.author_id, pr.status
-        FROM pull_requests pr
-        JOIN pull_request_reviewers prr ON pr.pull_request_id = prr.pull_request_id
-        WHERE prr.reviewer_id = $1 AND pr.status = 'OPEN'`
-
 	queryPRExists = `
         SELECT EXISTS(SELECT 1 FROM pull_requests WHERE pull_request_id = $1)`
 
@@ -39,10 +33,4 @@ const (
         SELECT reviewer_id 
         FROM pull_request_reviewers 
         WHERE pull_request_id = $1`
-
-	queryCheckPRReviewer = `
-        SELECT EXISTS(
-            SELECT 1 FROM pull_request_reviewers 
-            WHERE pull_request_id = $1 AND reviewer_id = $2
-        )`
 )

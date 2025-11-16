@@ -138,12 +138,3 @@ func (u *PRUsecase) ReassignReviewer(ctx context.Context, prID, oldUserID string
 
 	return updatedPR, newUserID, nil
 }
-
-func (u *PRUsecase) GetUserReviewPRs(ctx context.Context, userID string) ([]models.PullRequestShort, error) {
-	prs, err := u.prRepo.GetUserReviewPRs(ctx, userID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user review PRs: %w", err)
-	}
-
-	return prs, nil
-}

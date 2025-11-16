@@ -10,14 +10,12 @@ import (
 )
 
 type UserUsecase struct {
-	repo   repository.IUserRepository
-	prRepo repository.IPRRepository
+	repo repository.IUserRepository
 }
 
-func NewUserUsecase(repo repository.IUserRepository, prRepo repository.IPRRepository) *UserUsecase {
+func NewUserUsecase(repo repository.IUserRepository) *UserUsecase {
 	return &UserUsecase{
-		repo:   repo,
-		prRepo: prRepo,
+		repo: repo,
 	}
 }
 
@@ -43,5 +41,5 @@ func (u *UserUsecase) GetUserReviewPRs(ctx context.Context, userID string) ([]mo
 		return nil, fmt.Errorf("user not found: %w", errs.ErrNotFound)
 	}
 
-	return u.prRepo.GetUserReviewPRs(ctx, userID)
+	return u.repo.GetUserReviewPRs(ctx, userID)
 }

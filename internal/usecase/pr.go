@@ -10,5 +10,4 @@ type IPRUsecase interface {
 	CreatePR(context.Context, *models.PullRequestWithReviewers) (*models.PullRequestWithReviewers, error)
 	MergePR(context.Context, string) (*models.PullRequestWithReviewers, error)
 	ReassignReviewer(context.Context, string, string) (*models.PullRequestWithReviewers, string, error)
-	GetUserReviewPRs(context.Context, string) ([]models.PullRequestShort, error)
 }

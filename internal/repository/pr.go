@@ -11,7 +11,5 @@ type IPRRepository interface {
 	GetPR(context.Context, string) (*models.PullRequestWithReviewers, error)
 	UpdatePRReviewers(context.Context, string, []string) (*models.PullRequestWithReviewers, error)
 	MergePR(context.Context, string) (*models.PullRequestWithReviewers, error)
-	GetUserReviewPRs(context.Context, string) ([]models.PullRequestShort, error)
 	PRExists(context.Context, string) (bool, error)
-	IsPRReviewer(context.Context, string, string) (bool, error)
 }
