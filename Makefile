@@ -10,4 +10,7 @@ build:
 up:
 	docker-compose up
 
+linter:
+	golangci-lint run
+
 restart: stop clean build up
