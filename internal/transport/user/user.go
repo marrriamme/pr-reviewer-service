@@ -53,6 +53,5 @@ func (h *UserHandler) GetUserReviewPRs(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responseDTO := dto.NewUserReviewResponseDTO(userID, prs)
-
 	response.SendJSONResponse(r.Context(), w, http.StatusOK, responseDTO)
 }
