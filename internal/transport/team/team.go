@@ -29,7 +29,7 @@ func (h *TeamHandler) CreateTeam(w http.ResponseWriter, r *http.Request) {
 
 	if err := h.usecase.CreateTeam(r.Context(), team); err != nil {
 		if err == errs.ErrTeamExists {
-			response.SendJSONError(r.Context(), w, http.StatusConflict, "team already exists")
+			response.SendJSONError(r.Context(), w, http.StatusConflict, "team_name already exists")
 			return
 		}
 		response.HandleDomainError(r.Context(), w, err)
@@ -60,5 +60,6 @@ func (h *TeamHandler) GetTeam(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.SendJSONResponse(r.Context(), w, http.StatusOK, team)
+	responseDTO := dto.ToTeamResponseDTO(team)
+	response.SendJSONResponse(r.Context(), w, http.StatusOK, responseDTO)
 }

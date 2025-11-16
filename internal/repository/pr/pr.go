@@ -153,7 +153,7 @@ func (r *PRRepository) getPRReviewers(ctx context.Context, prID string) ([]strin
 	var reviewers []string
 	for rows.Next() {
 		var reviewer string
-		if err := rows.Scan(&reviewer); err != nil {
+		if err = rows.Scan(&reviewer); err != nil {
 			return nil, fmt.Errorf("failed to scan reviewer: %w", err)
 		}
 		reviewers = append(reviewers, reviewer)
@@ -162,7 +162,6 @@ func (r *PRRepository) getPRReviewers(ctx context.Context, prID string) ([]strin
 	return reviewers, nil
 }
 
-// Новый метод для проверки, является ли пользователь ревьювером PR
 func (r *PRRepository) IsPRReviewer(ctx context.Context, prID, userID string) (bool, error) {
 	var exists bool
 	if err := r.db.QueryRowContext(ctx, queryCheckPRReviewer, prID, userID).Scan(&exists); err != nil {

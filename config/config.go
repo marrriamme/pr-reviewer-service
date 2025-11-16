@@ -65,19 +65,19 @@ func newDBConfig() (*DBConfig, error) {
 
 	maxOpenConns := 25
 	if val, exists := os.LookupEnv("DB_MAX_OPEN_CONNS"); exists {
-		if parsed, err := strconv.Atoi(val); err == nil {
+		if parsed, err1 := strconv.Atoi(val); err1 == nil {
 			maxOpenConns = parsed
 		}
 	}
 	maxIdleConns := 25
 	if val, exists := os.LookupEnv("DB_MAX_IDLE_CONNS"); exists {
-		if parsed, err1 := strconv.Atoi(val); err1 == nil {
+		if parsed, err2 := strconv.Atoi(val); err2 == nil {
 			maxIdleConns = parsed
 		}
 	}
 	connMaxLifetime := 5 * time.Minute
 	if val, exists := os.LookupEnv("DB_CONN_MAX_LIFETIME"); exists {
-		if parsed, err2 := strconv.Atoi(val); err2 == nil {
+		if parsed, err3 := strconv.Atoi(val); err3 == nil {
 			connMaxLifetime = time.Duration(parsed) * time.Minute
 		}
 	}

@@ -7,8 +7,8 @@ import (
 )
 
 type IPRUsecase interface {
-	CreatePR(ctx context.Context, pr *models.PullRequestWithReviewers) (*models.PullRequestWithReviewers, error)
-	MergePR(ctx context.Context, prID string) (*models.PullRequestWithReviewers, error)
-	ReassignReviewer(ctx context.Context, prID, oldUserID string) (*models.PullRequestWithReviewers, string, error)
-	GetUserReviewPRs(ctx context.Context, userID string) ([]models.PullRequestShort, error)
+	CreatePR(context.Context, *models.PullRequestWithReviewers) (*models.PullRequestWithReviewers, error)
+	MergePR(context.Context, string) (*models.PullRequestWithReviewers, error)
+	ReassignReviewer(context.Context, string, string) (*models.PullRequestWithReviewers, string, error)
+	GetUserReviewPRs(context.Context, string) ([]models.PullRequestShort, error)
 }

@@ -7,8 +7,6 @@ import (
 )
 
 type IUserUsecase interface {
-	SetUserActivity(ctx context.Context, userID string, isActive bool) (*models.User, error)
-	GetUserReviewPRs(ctx context.Context, userID string) ([]models.PullRequestShort, error)
-	GetRandomActiveTeamMember(ctx context.Context, teamName, excludeUserID string) (string, error)
-	GetActiveTeamMembers(ctx context.Context, teamName, excludeUserID string) ([]models.User, error)
+	SetUserActivity(context.Context, string, bool) (*models.User, error)
+	GetUserReviewPRs(context.Context, string) ([]models.PullRequestShort, error)
 }

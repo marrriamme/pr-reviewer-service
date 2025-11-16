@@ -45,24 +45,3 @@ func (u *UserUsecase) GetUserReviewPRs(ctx context.Context, userID string) ([]mo
 
 	return u.prRepo.GetUserReviewPRs(ctx, userID)
 }
-
-func (u *UserUsecase) GetRandomActiveTeamMember(ctx context.Context, teamName, excludeUserID string) (string, error) {
-	userID, err := u.repo.GetRandomActiveTeamMember(ctx, teamName, excludeUserID)
-	if err != nil {
-		if err == errs.ErrNoCandidate {
-			return "", fmt.Errorf("no active team members available: %w", errs.ErrNoCandidate)
-		}
-		return "", fmt.Errorf("failed to get random team member: %w", err)
-	}
-
-	return userID, nil
-}
-
-func (u *UserUsecase) GetActiveTeamMembers(ctx context.Context, teamName, excludeUserID string) ([]models.User, error) {
-	users, err := u.repo.GetActiveTeamMembers(ctx, teamName, excludeUserID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get active team members: %w", err)
-	}
-
-	return users, nil
-}

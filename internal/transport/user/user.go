@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/marrria_mme/pr-reviewer-service/internal/models"
 	"github.com/marrria_mme/pr-reviewer-service/internal/models/errs"
 	"github.com/marrria_mme/pr-reviewer-service/internal/transport/dto"
 	"github.com/marrria_mme/pr-reviewer-service/internal/transport/utils/response"
@@ -60,6 +61,10 @@ func (h *UserHandler) GetUserReviewPRs(w http.ResponseWriter, r *http.Request) {
 		}
 		response.HandleDomainError(r.Context(), w, err)
 		return
+	}
+
+	if prs == nil {
+		prs = []models.PullRequestShort{}
 	}
 
 	responseDTO := dto.UserReviewResponseDTO{

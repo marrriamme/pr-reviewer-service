@@ -14,7 +14,12 @@ type TeamMemberDTO struct {
 }
 
 type TeamResponseDTO struct {
-	Team *models.Team `json:"team"`
+	Team *TeamDTO `json:"team"`
+}
+
+type TeamDTO struct {
+	TeamName string          `json:"team_name"`
+	Members  []TeamMemberDTO `json:"members"`
 }
 
 func ToTeamModel(dto TeamRequestDTO) *models.Team {
@@ -34,5 +39,19 @@ func ToTeamModel(dto TeamRequestDTO) *models.Team {
 }
 
 func ToTeamResponseDTO(team *models.Team) TeamResponseDTO {
-	return TeamResponseDTO{Team: team}
+	members := make([]TeamMemberDTO, len(team.Members))
+	for i, member := range team.Members {
+		members[i] = TeamMemberDTO{
+			UserID:   member.UserID,
+			Username: member.Username,
+			IsActive: member.IsActive,
+		}
+	}
+
+	teamDTO := &TeamDTO{
+		TeamName: team.TeamName,
+		Members:  members,
+	}
+
+	return TeamResponseDTO{Team: teamDTO}
 }

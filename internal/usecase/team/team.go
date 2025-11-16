@@ -24,7 +24,7 @@ func (u *TeamUsecase) CreateTeam(ctx context.Context, team *models.Team) error {
 	}
 
 	if exists {
-		return fmt.Errorf("team already exists: %w", errs.ErrTeamExists)
+		return fmt.Errorf("team_name already exists: %w", errs.ErrTeamExists)
 	}
 
 	if err = u.repo.CreateTeam(ctx, team); err != nil {

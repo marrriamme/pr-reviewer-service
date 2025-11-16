@@ -114,7 +114,7 @@ func (u *PRUsecase) ReassignReviewer(ctx context.Context, prID, oldUserID string
 		return nil, "", fmt.Errorf("failed to get old reviewer: %w", err)
 	}
 
-	newUserID, err := u.userRepo.GetRandomActiveTeamMember(ctx, oldUser.TeamName, oldUserID)
+	newUserID, err := u.userRepo.GetRandomActiveTeamMember(ctx, oldUser.TeamName, oldUserID, pr.AuthorID)
 	if err != nil {
 		if err == errs.ErrNoCandidate {
 			return nil, "", fmt.Errorf("no available reviewers found: %w", errs.ErrNoCandidate)

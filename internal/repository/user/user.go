@@ -62,9 +62,9 @@ func (r *UserRepository) GetActiveTeamMembers(ctx context.Context, teamName, exc
 	return users, nil
 }
 
-func (r *UserRepository) GetRandomActiveTeamMember(ctx context.Context, teamName, excludeUserID string) (string, error) {
+func (r *UserRepository) GetRandomActiveTeamMember(ctx context.Context, teamName, excludeUserID, excludeAuthorID string) (string, error) {
 	var userID string
-	if err := r.db.QueryRowContext(ctx, queryGetRandomActiveTeamMember, teamName, excludeUserID).Scan(&userID); err != nil {
+	if err := r.db.QueryRowContext(ctx, queryGetRandomActiveTeamMember, teamName, excludeUserID, excludeAuthorID).Scan(&userID); err != nil {
 		if err == sql.ErrNoRows {
 			return "", errs.ErrNoCandidate
 		}
@@ -74,8 +74,8 @@ func (r *UserRepository) GetRandomActiveTeamMember(ctx context.Context, teamName
 	return userID, nil
 }
 
-func (r *UserRepository) GetRandomActiveTeamMembers(ctx context.Context, teamName, excludeUserID string, limit int) ([]string, error) {
-	rows, err := r.db.QueryContext(ctx, queryGetRandomActiveTeamMembers, teamName, excludeUserID, limit)
+func (r *UserRepository) GetRandomActiveTeamMembers(ctx context.Context, teamName, excludeAuthorID string, limit int) ([]string, error) {
+	rows, err := r.db.QueryContext(ctx, queryGetRandomActiveTeamMembers, teamName, excludeAuthorID, limit)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get random active team members: %w", err)
 	}

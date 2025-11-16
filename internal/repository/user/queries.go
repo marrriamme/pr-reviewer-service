@@ -20,14 +20,19 @@ const (
 	queryGetRandomActiveTeamMember = `
         SELECT user_id
         FROM users
-        WHERE team_name = $1 AND is_active = true AND user_id != $2
+        WHERE team_name = $1 
+          AND is_active = true 
+          AND user_id != $2 
+          AND user_id != $3 
         ORDER BY RANDOM()
         LIMIT 1`
 
 	queryGetRandomActiveTeamMembers = `
         SELECT user_id
         FROM users
-        WHERE team_name = $1 AND is_active = true AND user_id != $2
+        WHERE team_name = $1 
+          AND is_active = true 
+          AND user_id != $2 
         ORDER BY RANDOM()
         LIMIT $3`
 

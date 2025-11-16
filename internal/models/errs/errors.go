@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	ErrTeamExists    = errors.New("team already exists")
+	ErrTeamExists    = errors.New("team_name already exists")
 	ErrPRExists      = errors.New("PR already exists")
 	ErrPRMerged      = errors.New("PR is merged")
 	ErrNotAssigned   = errors.New("reviewer not assigned")

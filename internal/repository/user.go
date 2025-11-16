@@ -7,10 +7,10 @@ import (
 )
 
 type IUserRepository interface {
-	GetUser(ctx context.Context, userID string) (*models.User, error)
-	UpdateUserActivity(ctx context.Context, userID string, isActive bool) (*models.User, error)
-	GetActiveTeamMembers(ctx context.Context, teamName, excludeUserID string) ([]models.User, error)
-	GetRandomActiveTeamMember(ctx context.Context, teamName, excludeUserID string) (string, error)
-	UserExists(ctx context.Context, userID string) (bool, error)
-	GetRandomActiveTeamMembers(ctx context.Context, teamName, excludeUserID string, limit int) ([]string, error)
+	GetUser(context.Context, string) (*models.User, error)
+	UpdateUserActivity(context.Context, string, bool) (*models.User, error)
+	GetActiveTeamMembers(context.Context, string, string) ([]models.User, error)
+	GetRandomActiveTeamMember(context.Context, string, string, string) (string, error)
+	GetRandomActiveTeamMembers(context.Context, string, string, int) ([]string, error)
+	UserExists(context.Context, string) (bool, error)
 }

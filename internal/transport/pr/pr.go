@@ -55,6 +55,10 @@ func (h *PRHandler) CreatePR(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	if createdPR.AssignedReviewers == nil {
+		createdPR.AssignedReviewers = []string{}
+	}
+
 	responseDTO := dto.ToPRResponseDTO(createdPR)
 	response.SendJSONResponse(r.Context(), w, http.StatusCreated, responseDTO)
 }
@@ -77,6 +81,10 @@ func (h *PRHandler) MergePR(w http.ResponseWriter, r *http.Request) {
 		}
 		response.HandleDomainError(r.Context(), w, err)
 		return
+	}
+
+	if mergedPR.AssignedReviewers == nil {
+		mergedPR.AssignedReviewers = []string{}
 	}
 
 	responseDTO := dto.ToPRResponseDTO(mergedPR)
@@ -121,6 +129,10 @@ func (h *PRHandler) ReassignReviewer(w http.ResponseWriter, r *http.Request) {
 			response.HandleDomainError(r.Context(), w, err)
 			return
 		}
+	}
+
+	if updatedPR.AssignedReviewers == nil {
+		updatedPR.AssignedReviewers = []string{}
 	}
 
 	responseDTO := dto.ToReassignResponseDTO(updatedPR, newUserID)

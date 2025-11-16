@@ -7,6 +7,6 @@ import (
 )
 
 type ITeamUsecase interface {
-	CreateTeam(ctx context.Context, team *models.Team) error
-	GetTeam(ctx context.Context, teamName string) (*models.Team, error)
+	CreateTeam(context.Context, *models.Team) error
+	GetTeam(context.Context, string) (*models.Team, error)
 }

@@ -11,16 +11,16 @@ import (
 
 	"github.com/marrria_mme/pr-reviewer-service/config"
 	"github.com/marrria_mme/pr-reviewer-service/internal/repository"
-	pr_repo "github.com/marrria_mme/pr-reviewer-service/internal/repository/pr"
-	team_repo "github.com/marrria_mme/pr-reviewer-service/internal/repository/team"
-	user_repo "github.com/marrria_mme/pr-reviewer-service/internal/repository/user"
+	prRepo "github.com/marrria_mme/pr-reviewer-service/internal/repository/pr"
+	teamRepo "github.com/marrria_mme/pr-reviewer-service/internal/repository/team"
+	userRepo "github.com/marrria_mme/pr-reviewer-service/internal/repository/user"
 	"github.com/marrria_mme/pr-reviewer-service/internal/transport/middleware"
-	pr_transport "github.com/marrria_mme/pr-reviewer-service/internal/transport/pr"
-	team_transport "github.com/marrria_mme/pr-reviewer-service/internal/transport/team"
-	user_transport "github.com/marrria_mme/pr-reviewer-service/internal/transport/user"
-	pr_usecase "github.com/marrria_mme/pr-reviewer-service/internal/usecase/pr"
-	team_usecase "github.com/marrria_mme/pr-reviewer-service/internal/usecase/team"
-	user_usecase "github.com/marrria_mme/pr-reviewer-service/internal/usecase/user"
+	prTransport "github.com/marrria_mme/pr-reviewer-service/internal/transport/pr"
+	teamTransport "github.com/marrria_mme/pr-reviewer-service/internal/transport/team"
+	userTransport "github.com/marrria_mme/pr-reviewer-service/internal/transport/user"
+	prUs "github.com/marrria_mme/pr-reviewer-service/internal/usecase/pr"
+	teamUs "github.com/marrria_mme/pr-reviewer-service/internal/usecase/team"
+	userUs "github.com/marrria_mme/pr-reviewer-service/internal/usecase/user"
 )
 
 type App struct {
@@ -44,17 +44,17 @@ func NewApp(conf *config.Config) (*App, error) {
 
 	config.ConfigureDB(db, conf.DBConfig)
 
-	teamRepo := team_repo.NewTeamRepository(db)
-	userRepo := user_repo.NewUserRepository(db)
-	prRepo := pr_repo.NewPRRepository(db)
+	teamRepository := teamRepo.NewTeamRepository(db)
+	userRepository := userRepo.NewUserRepository(db)
+	prRepository := prRepo.NewPRRepository(db)
 
-	teamUsecase := team_usecase.NewTeamUsecase(teamRepo)
-	userUsecase := user_usecase.NewUserUsecase(userRepo, prRepo)
-	prUsecase := pr_usecase.NewPRUsecase(prRepo, userRepo)
+	teamUsecase := teamUs.NewTeamUsecase(teamRepository)
+	userUsecase := userUs.NewUserUsecase(userRepository, prRepository)
+	prUsecase := prUs.NewPRUsecase(prRepository, userRepository)
 
-	teamHandler := team_transport.NewTeamHandler(teamUsecase)
-	userHandler := user_transport.NewUserHandler(userUsecase)
-	prHandler := pr_transport.NewPRHandler(prUsecase)
+	teamHandler := teamTransport.NewTeamHandler(teamUsecase)
+	userHandler := userTransport.NewUserHandler(userUsecase)
+	prHandler := prTransport.NewPRHandler(prUsecase)
 
 	router := mux.NewRouter()
 

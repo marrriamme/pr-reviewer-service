@@ -55,8 +55,8 @@ func HandleDomainError(ctx context.Context, w http.ResponseWriter, err error) {
 
 	switch {
 	case errors.Is(err, errs.ErrTeamExists):
-		SendJSONError(ctx, w, http.StatusConflict, "team already exists")
-		log.Debug("team already exists: ", err.Error())
+		SendJSONError(ctx, w, http.StatusConflict, "team_name already exists")
+		log.Debug("team_name already exists: ", err.Error())
 
 	case errors.Is(err, errs.ErrPRExists):
 		SendJSONError(ctx, w, http.StatusConflict, "PR already exists")
