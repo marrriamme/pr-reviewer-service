@@ -60,7 +60,9 @@ func (r *UserRepository) GetRandomActiveTeamMembers(ctx context.Context, teamNam
 	if err != nil {
 		return nil, fmt.Errorf("failed to get random active team members: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var userIDs []string
 	for rows.Next() {
@@ -92,7 +94,9 @@ func (r *UserRepository) GetUserReviewPRs(ctx context.Context, userID string) ([
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user review PRs: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var prs []models.PullRequestShort
 	for rows.Next() {
