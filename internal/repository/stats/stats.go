@@ -21,7 +21,9 @@ func (r *StatsRepository) GetUserAssignmentStats(ctx context.Context) ([]models.
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user assignment stats: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var stats []models.UserAssignmentStats
 	for rows.Next() {
@@ -40,7 +42,9 @@ func (r *StatsRepository) GetPRAssignmentStats(ctx context.Context) ([]models.PR
 	if err != nil {
 		return nil, fmt.Errorf("failed to get PR assignment stats: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var stats []models.PRAssignmentStats
 	for rows.Next() {

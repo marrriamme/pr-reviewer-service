@@ -22,7 +22,9 @@ func (r *PRRepository) CreatePR(ctx context.Context, pr *models.PullRequestWithR
 	if err != nil {
 		return nil, fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback()
+	defer func() {
+		_ = tx.Rollback()
+	}()
 
 	var createdPR models.PullRequest
 	if err = tx.QueryRowContext(ctx, queryCreatePR,
@@ -74,7 +76,9 @@ func (r *PRRepository) UpdatePRReviewers(ctx context.Context, prID string, revie
 	if err != nil {
 		return nil, fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback()
+	defer func() {
+		_ = tx.Rollback()
+	}()
 
 	if _, err = tx.ExecContext(ctx, queryDeletePRReviewers, prID); err != nil {
 		return nil, fmt.Errorf("failed to delete old reviewers: %w", err)
@@ -129,7 +133,9 @@ func (r *PRRepository) getPRReviewers(ctx context.Context, prID string) ([]strin
 	if err != nil {
 		return nil, fmt.Errorf("failed to get PR reviewers: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var reviewers []string
 	for rows.Next() {

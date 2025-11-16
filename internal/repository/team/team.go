@@ -22,7 +22,9 @@ func (r *TeamRepository) CreateTeam(ctx context.Context, team *models.Team) erro
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback()
+	defer func() {
+		_ = tx.Rollback()
+	}()
 
 	var exists bool
 	if err = tx.QueryRowContext(ctx, queryTeamExists, team.TeamName).Scan(&exists); err != nil {
@@ -54,7 +56,9 @@ func (r *TeamRepository) GetTeam(ctx context.Context, teamName string) (*models.
 	if err != nil {
 		return nil, fmt.Errorf("failed to get team members: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var members []models.TeamMember
 	for rows.Next() {

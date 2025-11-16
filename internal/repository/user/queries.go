@@ -12,11 +12,6 @@ const (
         WHERE user_id = $2
         RETURNING user_id, username, team_name, is_active`
 
-	queryGetActiveTeamMembers = `
-        SELECT user_id, username, team_name, is_active
-        FROM users
-        WHERE team_name = $1 AND is_active = true AND user_id != $2`
-
 	queryGetRandomActiveTeamMember = `
         SELECT user_id
         FROM users
